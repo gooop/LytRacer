@@ -1,7 +1,7 @@
 # Required Attributes
 name: LytRacer
 main: net.gooop.lytracer.LytRacer
-version: 1.20.4-0.0.0.0
+version: 1.20.4-0.0.1.0
 
 # Optional Attributes
 api-version: '1.20'
