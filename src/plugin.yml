@@ -1,0 +1,17 @@
+# Required Attributes
+name: LytRacer
+main: net.gooop.lytracer.LytRacer
+version: 1.20.4-0.0.0.0
+
+# Optional Attributes
+api-version: '1.20'
+description: A plugin that allows you to setup and play Elytra time trial courses.
+author: gooop (gooopbrand@gmail.com)
+website: www.gooop.net
+
+# Commands
+commands:
+  lyt:
+    permission: lytracing.lyt
+  lytconfig:
+    permission: lytracing.admin.lytconfig
