@@ -5,4 +5,20 @@
  * For more detailed information on multi-project builds, please refer to https://docs.gradle.org/8.6/userguide/multi_project_builds.html in the Gradle documentation.
  */
 
+// For github actions
+plugins {
+    id("com.gradle.enterprise") version("3.16.1")
+}
+
+gradleEnterprise {
+    if (System.getenv("CI") != null) {
+        buildScan {
+            publishAlways()
+            termsOfServiceUrl = "https://gradle.com/terms-of-service"
+            termsOfServiceAgree = "yes"
+        }
+    }
+}
+
+// Project name
 rootProject.name = 'LytRacer'
