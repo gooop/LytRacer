@@ -2,7 +2,7 @@
  * Name: CommandLyt
  * Description: Class for lyt command.
  * Author(s): Gooop
- * License: MIT
+ * License: MIT (See LICENSE)
  */
 
 
