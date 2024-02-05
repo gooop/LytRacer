@@ -25,7 +25,7 @@ public class CommandLyt implements CommandExecutor {
             ItemStack bricks = new ItemStack(Material.BRICK);
             bricks.setAmount(20);
             player.getInventory().addItem(bricks, diamond);
-
+            return true;
         }
 
         // If the console sends the command
