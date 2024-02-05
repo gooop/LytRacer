@@ -1,3 +1,10 @@
+/*
+ * Name: LytRacer
+ * Description: Main class for the LytRacer plugin.
+ * Author(s): Gooop
+ * License: MIT
+ */
+
 // Package name
 package net.gooop.lytracer;
 

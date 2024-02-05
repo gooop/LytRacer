@@ -1,3 +1,11 @@
+/*
+ * Name: CommandLyt
+ * Description: Class for lyt command.
+ * Author(s): Gooop
+ * License: MIT
+ */
+
+
 package net.gooop.lytracer.commands;
 
 import org.bukkit.Material;
