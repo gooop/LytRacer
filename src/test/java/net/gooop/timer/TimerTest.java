@@ -72,13 +72,45 @@ public class TimerTest {
 
         try {
             TimeUnit.SECONDS.sleep(10);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception occurred when trying to sleep");
         }
 
         timer.stopTimer();
         // 10000 is 10 seconds in milliseconds
-        assertTrue(timer.getTime() - 10000 < 10);
+        assertTrue(Math.abs(timer.getTime() - 10000) < 20);
     }
+    
+    @Test
+    public void getTimeSecondsUnder1Second() {
+        Timer timer = new Timer();
+        timer.startTimer();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (Exception e) {
+            System.out.println("Exception occurred when trying to sleep");
+        }
+
+        timer.stopTimer();
+
+        assertTrue(Math.abs(timer.getTimeSeconds() - 0.5f) < 0.02f);
+    }
+
+    @Test
+    public void getTimeSecondsOver1Second() {
+        Timer timer = new Timer();
+        timer.startTimer();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(5000);
+        } catch (Exception e) {
+            System.out.println("Exception occurred when trying to sleep");
+        }
+
+        timer.stopTimer();
+
+        assertTrue(Math.abs(timer.getTimeSeconds() - 5.0f) < 0.02);
+    }
+
 }
