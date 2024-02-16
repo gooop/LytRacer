@@ -30,12 +30,12 @@ public class CommandLyt implements CommandExecutor {
 
         // If the console sends the command
         if (sender instanceof ConsoleCommandSender) {
-            ConsoleCommandSender console = (ConsoleCommandSender) sender;
+            //ConsoleCommandSender console = (ConsoleCommandSender) sender;
         }
 
         // If a command block sends the command
         if (sender instanceof BlockCommandSender) {
-            BlockCommandSender block = (BlockCommandSender) sender;
+            //BlockCommandSender block = (BlockCommandSender) sender;
         }
 
         return false;
