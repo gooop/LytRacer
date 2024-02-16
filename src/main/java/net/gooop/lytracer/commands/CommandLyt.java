@@ -1,3 +1,11 @@
+/*
+ * Name: CommandLyt
+ * Description: Class for lyt command.
+ * Author(s): Gooop
+ * License: MIT (See LICENSE)
+ */
+
+
 package net.gooop.lytracer.commands;
 
 import org.bukkit.Material;
@@ -17,17 +25,17 @@ public class CommandLyt implements CommandExecutor {
             ItemStack bricks = new ItemStack(Material.BRICK);
             bricks.setAmount(20);
             player.getInventory().addItem(bricks, diamond);
-
+            return true;
         }
 
         // If the console sends the command
         if (sender instanceof ConsoleCommandSender) {
-            ConsoleCommandSender console = (ConsoleCommandSender) sender;
+            //ConsoleCommandSender console = (ConsoleCommandSender) sender;
         }
 
         // If a command block sends the command
         if (sender instanceof BlockCommandSender) {
-            BlockCommandSender block = (BlockCommandSender) sender;
+            //BlockCommandSender block = (BlockCommandSender) sender;
         }
 
         return false;
