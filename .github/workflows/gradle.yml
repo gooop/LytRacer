@@ -51,6 +51,12 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+
+    # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
+    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
+        
     - name: Run tests with Gradle
       run: ./gradlew test --no-daemon
 
