@@ -28,13 +28,51 @@ public class TimerTest {
         // Act
         try {
             TimeUnit.SECONDS.sleep(1);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception occurred when trying to sleep");
         }
 
         // Assert
         assertTrue(timer.getTime() > 0);
+    }
+    
+    @Test
+    public void timerRunningReturnsTrueWhenTimerStarted() {
+        // Arrange
+        Timer timer = new Timer(0);
+
+        // Act
+        timer.startTimer();
+        Boolean running = timer.getTimerRunning();
+
+        // Assert
+        assertTrue(running);
+    }
+
+    @Test
+    public void timerRunningReturnsFalseWhenTimerNotStarted() {
+        // Arrange
+        Timer timer = new Timer(0);
+
+        // Act
+        Boolean running = timer.getTimerRunning();
+
+        // Assert
+        assertTrue(!running);
+    }
+
+    @Test
+    public void timerRunningReturnsFalseWhenStoppedAfterStarting() {
+        // Arrange
+        Timer timer = new Timer(0);
+
+        // Act
+        timer.startTimer();
+        timer.stopTimer();
+        Boolean running = timer.getTimerRunning();
+
+        // Assert
+        assertTrue(!running);
     }
 
     @Test
