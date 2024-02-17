@@ -95,4 +95,10 @@ public class Timer {
         return splitsSeconds;
     }
 
+    /**
+     * Returns timerRunning
+     */
+    public Boolean getTimerRunning() {
+        return timerRunning;
+    }
 }
