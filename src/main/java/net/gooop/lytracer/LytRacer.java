@@ -10,6 +10,7 @@ package net.gooop.lytracer;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
 
 // Misc imports
 import java.util.UUID;
@@ -21,12 +22,18 @@ import net.gooop.lytracer.game.Game;
 import net.gooop.lytracer.course.Course;
 
 public class LytRacer extends JavaPlugin {
+    // LytRacer singleton
+    private static LytRacer instance;
+
     // Member variables
     private HashMap<UUID, Game> games = new HashMap<>();
 
     // Called when plugin is first enabled
     @Override
     public void onEnable() {
+        // Assign value to singleton
+        instance = this;
+
         // Register our commands
         this.getCommand("lyt").setExecutor(new CommandLyt());
     }
@@ -40,9 +47,9 @@ public class LytRacer extends JavaPlugin {
      * Starts a new game
      * @param gameId The game ID to use for the game instance
      */
-    public void startNewGame(UUID gameId) {
+    public void startNewGame(UUID gameId, Player player) {
         Course course = new Course();
-        Game game = new Game(gameId, course);
+        Game game = new Game(gameId, course, player, this);
         games.put(gameId, game);
         game.start();
     }
@@ -66,5 +73,12 @@ public class LytRacer extends JavaPlugin {
      */
     public Game getGame(UUID gameId) {
         return games.get(gameId);
+    }
+
+    /**
+     * LytRacer singleton getter
+     */
+    public static LytRacer getLytRacer() {
+        return instance;
     }
 }
