@@ -30,8 +30,17 @@ dependencies {
 }
 
 shadowJar {
+    // Make a fat jar so reflections can be accessed at runtime.
     archiveClassifier.set('')
     configurations = [project.configurations.runtimeClasspath]
+
+    // Utils to be able to get version number at runtime.
+    manifest {
+        attributes(
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version
+        )
+    }
 }
 
 build.dependsOn shadowJar
