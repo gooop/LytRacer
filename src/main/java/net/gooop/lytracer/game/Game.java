@@ -32,10 +32,11 @@ public class Game {
     
 
     /**
-     * Constructor for Game class that includes id and course
+     * Constructor for Game class that includes id, course, player, and plugin singleton
      * @param id The game ID assigned to this game instance.
      * @param course The course associated with this game instance.
      * @param player The player associated with this game instance.
+     * @param plugin The plugin singleton.
      */
     public Game(UUID id, Course course, Player player, LytRacer plugin) {
         this.id = id;
