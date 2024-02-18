@@ -36,7 +36,6 @@ public class LytRacer extends JavaPlugin {
 
         // Register our commands
         this.getCommand("lyt").setExecutor(new CommandLyt());
-        this.getCommand("timer").setExecutor(new CommandTimer());
     }
 
     // Called when plugin is disabled
