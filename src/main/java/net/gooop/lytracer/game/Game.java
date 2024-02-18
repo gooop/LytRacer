@@ -8,6 +8,7 @@ package net.gooop.lytracer.game;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.Player;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -21,11 +22,14 @@ import net.gooop.lytracer.timer.*;
 import net.gooop.lytracer.course.*;
 
 public class Game {
-    private Timer timer;
     private UUID id;
     private Course course;
     private Player player;
     private final LytRacer plugin;
+
+    private Timer timer;
+    private BukkitTask timerTask;
+    
 
     /**
      * Constructor for Game class that includes id and course
@@ -46,29 +50,9 @@ public class Game {
     public void start() {
         timer = new Timer(course.getNumCheckpoints());
 
-        // TODO: Arrest player movement
-        // Anonymous repeating BukkitRunnable task
-        new BukkitRunnable() {
-            int counter = 3;
-
-            @Override
-            public void run() {
-                if (counter > 0) {
-                    player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", 1, 20, 1);
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                            TextComponent.fromLegacyText(String.valueOf(timer.getTimeSeconds())));
-                    counter--;
-                }
-                else {
-                    player.sendTitle("§2GO!", "", 1, 20, 1);
-                    timer.startTimer();
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                            TextComponent.fromLegacyText(String.valueOf(timer.getTimeSeconds())));
-                    super.cancel();
-                    // TODO: allow player to move
-                }
-            }
-        }.runTaskTimer(this.plugin, 0L, 20L);
+        // Anonymous repeating BukkitRunnable tasks
+        anonStartGame();
+        timerTask = anonStartTimerUI();
     }
     
     /**
@@ -76,6 +60,7 @@ public class Game {
      */
     public void stop() {
         timer.stopTimer();
+        timerTask.cancel();
     }
 
     /**
@@ -85,4 +70,60 @@ public class Game {
         return id;
     }
 
+    // Helpers
+    /**
+     * Function that creates an anonymous BukkitTask that starts the game
+     * @return
+     */
+    private BukkitTask anonStartGame() {
+        BukkitTask startGameTask = new BukkitRunnable() {
+            int counter = 3;
+
+            @Override
+            public void run() {
+                if (counter > 0) {
+                    // UI
+                    player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", 1, 20, 1);
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                            TextComponent.fromLegacyText("Timer Starting..."));
+                                
+                    // Game
+                    counter--;
+                } else {
+                    // UI
+                    player.sendTitle("§2GO!", "", 1, 20, 1);
+
+                    // Game
+                    timer.startTimer();
+                    // TODO: allow player to move
+
+                    // Cancel runner
+                    super.cancel();
+                    
+
+                }
+            }
+        }.runTaskTimer(this.plugin, 0L, 20L);
+
+        return startGameTask;
+    }
+
+    /**
+     * Function that creates an anonymous BukkitTask that repeatedly calls the timer UI
+     * It ouputs the total time and last split time.
+     * @return BukkitTask timer task object
+     */
+    private BukkitTask anonStartTimerUI() {
+        BukkitTask timerTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                // UI
+                float lastSplit = timer.getLastSplitSeconds();
+                String timerString = "Time: §e" + String.valueOf(timer.getTimeSeconds()) + "(s) §f§l - §r Last Split: §e" + String.valueOf(lastSplit);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        TextComponent.fromLegacyText(timerString));
+                }
+        }.runTaskTimer(this.plugin, 61L, 1L);
+        return timerTask;
+    }
 }

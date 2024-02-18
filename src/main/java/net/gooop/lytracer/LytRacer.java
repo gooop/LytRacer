@@ -36,6 +36,7 @@ public class LytRacer extends JavaPlugin {
 
         // Register our commands
         this.getCommand("lyt").setExecutor(new CommandLyt());
+        this.getCommand("timer").setExecutor(new CommandTimer());
     }
 
     // Called when plugin is disabled
@@ -58,7 +59,7 @@ public class LytRacer extends JavaPlugin {
      * Ends a game
      * @param gameId The game ID used to look up the game instance from the hashmap.
      */
-    public void endGame(UUID gameId) {
+    public void stopGame(UUID gameId) {
         Game game = games.get(gameId);
         if (game != null) {
             game.stop();
