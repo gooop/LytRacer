@@ -13,6 +13,9 @@ public class Course {
         numCheckpoints = 3;
     }
 
+    /**
+     * Getter for numCheckpoints
+     */
     public int getNumCheckpoints() {
         return numCheckpoints;
     }
