@@ -274,18 +274,21 @@ public class TimerTest {
         Timer timer = new Timer(15);
         timer.startTimer();
 
-
         // Act
-        try {
-            for (int i = 0; i < 16; i++) {
-                timer.saveSplit();
+        for (int i = 0; i < 16; i++) {
+            timer.saveSplit();
+            try {
                 TimeUnit.MILLISECONDS.sleep(waitTime);
+            }
+            catch (Exception e) {
+                System.out.println("Exception occurred when trying to sleep");
+            }
+            
+            // If i == 15, the last saved split is actually the end of the course.
+            if (i != 15) {
                 splits[i] = timer.getLastSplitSeconds();
             }
-        } catch (Exception e) {
-            System.out.println("Exception occurred when trying to sleep");
         }
-
 
         // Assert
         splits = timer.getSplitsSeconds();
