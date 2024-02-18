@@ -96,7 +96,21 @@ public class Timer {
     }
 
     /**
+     * 
+     * @return Returns the last split in seconds.
+     */
+    public float getLastSplitSeconds() {
+        if (currentCheckpoint == 0) {
+            return 0.0f;
+        }
+        else {
+            return splits[currentCheckpoint] / 1000.0f;
+        }
+    }
+
+    /**
      * Returns timerRunning
+     * @return Boolean, whether the timer is running or not.
      */
     public Boolean getTimerRunning() {
         return timerRunning;

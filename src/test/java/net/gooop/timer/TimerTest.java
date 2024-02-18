@@ -223,7 +223,71 @@ public class TimerTest {
         }
 
         // Assert
-        float[] splits = new float[2];
+        float[] splits = new float[16];
+        splits = timer.getSplitsSeconds();
+        for (int i = 0; i < splits.length; i++) {
+            float waitTimeSeconds = (float) ((waitTime) / 1000) * i;
+            float difference = Math.abs(splits[i] - waitTimeSeconds);
+            assertTrue(difference < 0.02 * (i + 1));
+        }
+    }
+
+    @Test
+    public void getLastSplitSecondsReturns0BeforeFirstSplit() {
+        // Arrange
+        Timer timer = new Timer(0);
+        timer.startTimer();
+
+        // Act
+        float lastSplit = timer.getLastSplitSeconds();
+
+        // Assert
+        assertEquals(0.0f, lastSplit);
+    }
+    
+    @Test
+    public void getLastSplitSecondsReturnsLastSplit1Checkpoint() {
+        // Arrange
+        int waitTime = 1000;
+        Timer timer = new Timer(1);
+        timer.startTimer();
+
+        // Act
+        try {
+            TimeUnit.MILLISECONDS.sleep(waitTime);
+        } catch (Exception e) {
+            System.out.println("Exception occurred when trying to sleep");
+        }
+        timer.saveSplit();
+        float lastSplit = timer.getLastSplitSeconds();
+
+        // Assert
+        float difference = lastSplit - 1.0f;
+        assertTrue(difference < 0.02);
+    }
+
+    @Test
+    public void getLastSplitSecondsReturnsLastSplit15Checkpoints() {
+        // Arrange
+        int waitTime = 1000;
+        float[] splits = new float[16];
+        Timer timer = new Timer(15);
+        timer.startTimer();
+
+
+        // Act
+        try {
+            for (int i = 0; i < 16; i++) {
+                timer.saveSplit();
+                TimeUnit.MILLISECONDS.sleep(waitTime);
+                splits[i] = timer.getLastSplitSeconds();
+            }
+        } catch (Exception e) {
+            System.out.println("Exception occurred when trying to sleep");
+        }
+
+
+        // Assert
         splits = timer.getSplitsSeconds();
         for (int i = 0; i < splits.length; i++) {
             float waitTimeSeconds = (float) ((waitTime) / 1000) * i;
