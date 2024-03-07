@@ -9,11 +9,11 @@ package net.gooop.lytracer.commands;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.command.CommandSender;
-// import org.bukkit.Material;
-// import org.bukkit.command.*;
-// import org.bukkit.entity.Player;
-// import org.bukkit.inventory.ItemStack;
 
+// Misc Imports
+import java.util.ArrayList;
+
+// LytRacer Specific Imports
 import net.gooop.lytracer.LytRacer;
 
 abstract public class LytCommand {
@@ -48,4 +48,14 @@ abstract public class LytCommand {
      * @param args Any args
      */
     public abstract void help(LytRacer plugin, CommandSender sender, String[] args);
+    
+    /**
+     * This function gets and returns the list of suggestions for the next arg of a given command. This is for use in implementing onTabComplete.
+     * For example, if the implementing class is "StartCommand," then this would return the list of options available after
+     * typing /lyt start. This should be true for n arguments, so if there are options for an arg3 when typing "/lyt start arg2"
+     * it should return the list of options for arg3.
+     * @param args the args in the command starting with arg0 being the command itself.
+     * @return ArrayList, options for the next arg.
+     */
+    public abstract ArrayList<String> tabCompleteSuggestions(String[] args);
 }

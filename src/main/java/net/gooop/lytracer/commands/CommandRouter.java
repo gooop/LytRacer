@@ -79,6 +79,9 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
                 version.run(plugin, sender, args);
                 sender.sendMessage("For help with LytRacer commands, type /lyt help");
             }
+            else {
+                sender.sendMessage("For help with LytRacer commands, type /lyt help");
+            }
             return true;
         }
         if (commands.containsKey(args[0])) {
@@ -96,14 +99,19 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        // TODO Auto-generated method stub
-        List<String> dummyTabComplete = new ArrayList<>();
-        dummyTabComplete.add("t");
-        dummyTabComplete.add("o");
-        dummyTabComplete.add("d");
-        dummyTabComplete.add("o");
-        return dummyTabComplete;
-        //throw new UnsupportedOperationException("Unimplemented method 'onTabComplete'");
+        List<String> suggestions = new ArrayList<>();
+
+        // Suggest sub command suggestions
+        if (args.length > 1) {
+            if (commands.get(args[0]) != null) {
+                suggestions = commands.get(args[0]).tabCompleteSuggestions(args);
+            }
+        }
+        else {
+            // TODO: Don't suggest commands sender doesn't have permissions for.
+            suggestions = new ArrayList<String>(commands.keySet());
+        }
+        return suggestions;
     }
     
 }

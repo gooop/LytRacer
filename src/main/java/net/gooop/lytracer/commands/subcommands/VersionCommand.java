@@ -12,6 +12,8 @@ import net.gooop.lytracer.commands.LytCommand;
 import net.gooop.lytracer.LytRacer;
 import net.gooop.lytracer.commands.CommandInfo;
 
+import java.util.ArrayList;
+
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.command.CommandSender;
 
@@ -32,5 +34,10 @@ public class VersionCommand extends LytCommand {
     @Override
     public void help(LytRacer plugin, CommandSender sender, String[] args) {
         //TODO: implement
+    }
+
+    @Override
+    public ArrayList<String> tabCompleteSuggestions(String[] args) {
+        return new ArrayList<>();
     }
 }

@@ -94,6 +94,9 @@ public class LytRacer extends JavaPlugin {
         return instance;
     }
 
+    /**
+     * LytRacer version getter
+     */
     public static String getVersion() {
         Package pkg = LytRacer.class.getPackage();
         String version = (pkg != null) ? pkg.getImplementationVersion() : null;
