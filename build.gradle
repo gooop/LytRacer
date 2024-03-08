@@ -7,6 +7,7 @@
 
 
 plugins {
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'java'
 }
 
@@ -14,7 +15,7 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 group 'spigot.gradle.project'
-version '1.20.4-0.0.1.0'
+version '1.20.4-0.1.0.0'
 
 repositories {
     mavenCentral()
@@ -25,7 +26,24 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    implementation 'org.reflections:reflections:0.9.12'
 }
+
+shadowJar {
+    // Make a fat jar so reflections can be accessed at runtime.
+    archiveClassifier.set('')
+    configurations = [project.configurations.runtimeClasspath]
+
+    // Utils to be able to get version number at runtime.
+    manifest {
+        attributes(
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version
+        )
+    }
+}
+
+build.dependsOn shadowJar
 
 test {
     useJUnitPlatform()

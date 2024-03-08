@@ -25,6 +25,9 @@ public class LytRacer extends JavaPlugin {
     // LytRacer singleton
     private static LytRacer instance;
 
+    // commandRouter instance
+    private CommandRouter commandRouter;
+
     // Member variables
     private HashMap<UUID, Game> games = new HashMap<>();
 
@@ -34,8 +37,17 @@ public class LytRacer extends JavaPlugin {
         // Assign value to singleton
         instance = this;
 
-        // Register our commands
-        this.getCommand("lyt").setExecutor(new CommandLyt());
+        this.getLogger().info("======== INITIALIZING LytRacer ========");
+
+        // Start command router, initialize commands, and register the router
+        commandRouter = new CommandRouter(instance);
+        commandRouter.scanForSubCommands();
+        commandRouter.initializeSubCommands();
+        this.getCommand("lyt").setExecutor(commandRouter);
+
+        this.getLogger().info("======== LytRacer INITIALIZED ========");
+
+
     }
 
     // Called when plugin is disabled
@@ -80,5 +92,14 @@ public class LytRacer extends JavaPlugin {
      */
     public static LytRacer getLytRacer() {
         return instance;
+    }
+
+    /**
+     * LytRacer version getter
+     */
+    public static String getVersion() {
+        Package pkg = LytRacer.class.getPackage();
+        String version = (pkg != null) ? pkg.getImplementationVersion() : null;
+        return (version != null) ? version : "Unknown";
     }
 }
