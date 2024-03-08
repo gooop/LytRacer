@@ -36,6 +36,13 @@ abstract public class LytCommand {
     public abstract void run(LytRacer plugin, CommandSender sender, String[] args);
 
     /**
+     * @return String, command description
+     */
+    public String getDescription() {
+        return "Description for command not implemented.";
+    }
+
+    /**
      * Returns a usage string. Should be implemented by every command. The help instance for the command should show detailed usage.
      * @return String, usage string. Should be formatted like: "Usage: command <necessary> [optional|or|optional]"
      */

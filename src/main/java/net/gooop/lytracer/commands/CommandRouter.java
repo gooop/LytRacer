@@ -73,26 +73,38 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            // No args provided. Special case: do Info/Version command and tell user how to get help
+            // Special case 1: No args provided. do Info/Version command and tell user how to get help
             LytCommand version = commands.get("version");
             if (version != null) {
                 version.run(plugin, sender, args);
-                sender.sendMessage("For help with LytRacer commands, type /lyt help");
-            }
-            else {
-                sender.sendMessage("For help with LytRacer commands, type /lyt help");
+                sender.sendMessage("§3For help with LytRacer commands, type /lyt help§r");
+            } else {
+                sender.sendMessage("§3For help with LytRacer commands, type /lyt help§r");
             }
             return true;
         }
-        if (commands.containsKey(args[0])) {
+
+        String potentialCommand = args[0].toLowerCase();
+        if (potentialCommand.equals("help")) {
+            int pages = (int) Math.ceil((double)commands.size() / 5);
+            // Special Case 2: /lyt help.
+            sender.sendMessage("§3================== Help Page (1/" + String.valueOf(pages) + ") ==================§r");
+            //TODO: Limit to 5 per page
+            for (Map.Entry<String, LytCommand> target : commands.entrySet()) {
+                sender.sendMessage(target.getKey() + "§3: " + target.getValue().getDescription());
+            }
+            sender.sendMessage("§3================== Help Page (1/" + String.valueOf(pages) + ") ==================§r");
+            return true;
+        }
+        else if (commands.containsKey(potentialCommand)) {
             // Well-formed/Normal case
-            commands.get(args[0]).run(plugin, sender, args);
+            commands.get(potentialCommand).run(plugin, sender, args);
             return true;
         }
         else {
             // Malformed case
-            sender.sendMessage("§cError processing command. Unrecognized argument: " + args[0]);
-            sender.sendMessage("For help with LytRacer commands, type /lyt help");
+            sender.sendMessage("§3Error processing command. Unrecognized argument: §4" + args[0] + "§r");
+            sender.sendMessage("§3For help with LytRacer commands, type /lyt help§r");
             return true;
         }
     }
@@ -103,13 +115,15 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
 
         // Suggest sub command suggestions
         if (args.length > 1) {
-            if (commands.get(args[0]) != null) {
-                suggestions = commands.get(args[0]).tabCompleteSuggestions(args);
+            String target = args[0].toLowerCase();
+            if (commands.get(target) != null) {
+                suggestions = commands.get(target).tabCompleteSuggestions(args);
             }
         }
         else {
             // TODO: Don't suggest commands sender doesn't have permissions for.
             suggestions = new ArrayList<String>(commands.keySet());
+            suggestions.add(0, "help");
         }
         return suggestions;
     }
