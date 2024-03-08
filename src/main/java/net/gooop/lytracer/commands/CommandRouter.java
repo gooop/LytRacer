@@ -1,6 +1,6 @@
 /*
  * Name: CommandRouter
- * Description: Routes commands to their correct implementation
+ * Description: Routes commands to their correct implementation and implements help command
  * Author(s): Gooop
  * License: MIT
  */
@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Set;
 import org.reflections.Reflections;
 
+// LytRacer Specific Imports
 import net.gooop.lytracer.LytRacer;
 
 public class CommandRouter implements CommandExecutor, TabCompleter {
@@ -72,6 +73,10 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        /**
+         * This onCommand implementation calls the .run method of a valid command, or displays an error.
+         * It also implements the top-level help command, which displays all of the commands and their descriptions.
+         */
         if (args.length == 0) {
             // Special case 1: No args provided. do Info/Version command and tell user how to get help
             LytCommand version = commands.get("version");
@@ -89,7 +94,7 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
             int pages = (int) Math.ceil((double)commands.size() / 5);
             // Special Case 2: /lyt help.
             sender.sendMessage("§3================== Help Page (1/" + String.valueOf(pages) + ") ==================§r");
-            //TODO: Limit to 5 per page
+            //TODO: Limit to 5 per page and add page support.
             for (Map.Entry<String, LytCommand> target : commands.entrySet()) {
                 sender.sendMessage(target.getKey() + "§3: " + target.getValue().getDescription());
             }
@@ -127,5 +132,4 @@ public class CommandRouter implements CommandExecutor, TabCompleter {
         }
         return suggestions;
     }
-    
 }

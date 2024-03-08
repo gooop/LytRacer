@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 @CommandInfo(name = "start")
 public class StartCommand extends LytCommand {
     private final String description = "Starts a game.";
+    
     @Override
     public void run(LytRacer plugin, CommandSender sender, String[] args) {
         // TODO: implement

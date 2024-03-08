@@ -1,6 +1,6 @@
 /*
  * Name: VersionCommand
- * Description: 
+ * Description: Coommand to display the version of the plugin in game.
  * Author(s): Gooop
  * License: MIT
  */
@@ -19,10 +19,17 @@ import org.bukkit.command.CommandSender;
 
 @CommandInfo(name = "version")
 public class VersionCommand extends LytCommand {
+    private final String description = "Displays the version of the plugin.";
+
     @Override
     public void run(LytRacer plugin, CommandSender sender, String[] args) {
         String version = LytRacer.getVersion();
         sender.sendMessage("LytRacer Version " + version + " by Gooop. §2Donate: https://ko-fi.com/gooop");
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override
