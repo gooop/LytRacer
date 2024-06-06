@@ -29,6 +29,7 @@ public class Game {
 
     private Timer timer;
     private BukkitTask timerTask;
+    private Boolean gameStarted = false;
     
 
     /**
@@ -71,6 +72,13 @@ public class Game {
         return id;
     }
 
+    /**
+     * Get game instance ID.
+     */
+    public Boolean getGameStarted() {
+        return gameStarted;
+    }
+
     // Helpers
     /**
      * Function that creates an anonymous BukkitTask that starts the game
@@ -96,6 +104,7 @@ public class Game {
 
                     // Game
                     timer.startTimer();
+                    gameStarted = true;
                     // TODO: allow player to move
 
                     // Cancel runner
