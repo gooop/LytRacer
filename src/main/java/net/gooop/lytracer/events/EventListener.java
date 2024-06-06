@@ -9,8 +9,8 @@ package net.gooop.lytracer.events;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
 // LytRacer Specific Imports
@@ -35,5 +35,17 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         plugin.stopGame(event.getPlayer().getUniqueId());
+    }
+
+    /**
+     * Arrest player movement if they're in a game
+     */
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        // Arrest movement if game player is in has not started
+        if (plugin.getGame(event.getPlayer().getUniqueId()).getGameStarted() == false) {
+            event.setTo(event.getFrom().setDirection(event.getTo().getDirection()));
+        }
+
     }
 }
