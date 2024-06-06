@@ -47,11 +47,9 @@ public class LytRacer extends JavaPlugin {
         this.getCommand("lyt").setExecutor(commandRouter);
 
         // Register event listener
-        getServer().getPluginManager().registerEvents(new EventListener(), this);
+        getServer().getPluginManager().registerEvents(new EventListener(instance), this);
 
         this.getLogger().info("======== LytRacer INITIALIZED ========");
-
-
     }
 
     // Called when plugin is disabled
