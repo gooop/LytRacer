@@ -6,11 +6,18 @@
  */
 package net.gooop.lytracer.course;
 
+// Bukkit/Spigot/Paper Specific Imports
+import org.bukkit.Location;
+
 public class Course {
+    private Location startLocation;
+    private Location endLocation;
+
     private int numCheckpoints;
 
     public Course() {
         numCheckpoints = 3;
+        
     }
 
     /**
@@ -19,4 +26,19 @@ public class Course {
     public int getNumCheckpoints() {
         return numCheckpoints;
     }
+    
+    /**
+     * Getter for startLocation
+     */
+    public Location getStartLocation() {
+        return startLocation;
+    }
+    
+    /**
+     * Getter for endLocation
+     */
+    public Location getEndLocation() {
+        return endLocation;
+    }
+
 }
