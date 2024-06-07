@@ -30,7 +30,7 @@ public class StartCommand extends LytCommand {
             plugin.getLogger().info("Calling startNewGame with UUID: " + player.getUniqueId().toString());
             boolean result = plugin.startNewGame(player);
             if (!result) {
-                player.sendMessage("§3You have already started a game!§r");
+                player.sendMessage("§3You have already started a race!§r");
             }
         }
         else {
