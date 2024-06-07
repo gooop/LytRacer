@@ -8,6 +8,8 @@ package net.gooop.lytracer.course;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.Bukkit; // TODO: remove when locations are properly handled
 
 public class Course {
     private Location startLocation;
@@ -17,7 +19,8 @@ public class Course {
 
     public Course() {
         numCheckpoints = 3;
-        
+        World world = Bukkit.getServer().getWorld("world");
+        startLocation = new Location(world, 100.0, 150.0, 100.0);
     }
 
     /**

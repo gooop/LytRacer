@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.Player;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Location;
 
 // Misc imports
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class Game {
     private Course course;
     private Player player;
     private final LytRacer plugin;
+    private Location preGameLocation;
 
     private Timer timer;
     private BukkitTask timerTask;
@@ -58,6 +60,10 @@ public class Game {
     public void start() {
         timer = new Timer(course.getNumCheckpoints());
 
+        // Handle player location
+        preGameLocation = player.getLocation();
+        player.teleport(course.getStartLocation());
+
         // Anonymous repeating BukkitRunnable tasks
         anonStartGame();
         timerTask = anonStartTimerUI();
@@ -67,6 +73,12 @@ public class Game {
      * Stops the game
      */
     public void stop() {
+        // Handle player location
+        if (player.isOnline()) {
+            player.teleport(preGameLocation);
+        }
+
+        // Stop timer and cancel task
         timer.stopTimer();
         timerTask.cancel();
     }
@@ -91,8 +103,6 @@ public class Game {
      * @return
      */
     private BukkitTask anonStartGame() {
-
-
         BukkitTask startGameTask = new BukkitRunnable() {
             int counter = START_COUNTDOWN;
 
@@ -113,7 +123,6 @@ public class Game {
                     // Game
                     timer.startTimer();
                     gameStarted = true;
-                    // TODO: allow player to move
 
                     // Cancel runner
                     super.cancel();

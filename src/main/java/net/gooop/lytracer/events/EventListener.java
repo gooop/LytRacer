@@ -44,8 +44,8 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         // Arrest movement if game player is in has not started (allows them to look around).
-        Game playersGameInstance = plugin.getGame(event.getPlayer().getUniqueId());
-        if (playersGameInstance != null && !playersGameInstance.getGameStarted()) {
+        Game playerGameInstance = plugin.getGame(event.getPlayer().getUniqueId());
+        if (playerGameInstance != null && !playerGameInstance.getGameStarted()) {
             event.setTo(event.getFrom().setDirection(event.getTo().getDirection()));
         }
 

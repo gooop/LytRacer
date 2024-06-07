@@ -82,12 +82,14 @@ public class LytRacer extends JavaPlugin {
      * Ends a game
      * @param gameId The game ID used to look up the game instance from the hashmap.
      */
-    public void stopGame(UUID gameId) {
+    public Boolean stopGame(UUID gameId) {
         Game game = games.get(gameId);
         if (game != null) {
             game.stop();
             games.remove(gameId);
+            return true;
         }
+        return false;
     }
 
     /**
