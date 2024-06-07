@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.LytRacer;
+import net.gooop.lytracer.game.Game;
 
 public class EventListener implements Listener {
     private final LytRacer plugin;
@@ -43,7 +44,8 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         // Arrest movement if game player is in has not started (allows them to look around).
-        if (plugin.getGame(event.getPlayer().getUniqueId()).getGameStarted() == false) {
+        Game playersGameInstance = plugin.getGame(event.getPlayer().getUniqueId());
+        if (playersGameInstance != null && !playersGameInstance.getGameStarted()) {
             event.setTo(event.getFrom().setDirection(event.getTo().getDirection()));
         }
 
