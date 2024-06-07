@@ -22,6 +22,12 @@ import net.gooop.lytracer.timer.*;
 import net.gooop.lytracer.course.*;
 
 public class Game {
+    private static final int TITLE_FADE = 1;
+    private static final int TITLE_STAY = 20;
+    private static final int START_COUNTDOWN = 3;
+    private static final long SECOND_IN_TICKS = 20L; // 20 ticks is one second
+    private static final long TIMER_UI_UPDATE_PERIOD = 1L;
+
     private UUID id;
     private Course course;
     private Player player;
@@ -85,14 +91,16 @@ public class Game {
      * @return
      */
     private BukkitTask anonStartGame() {
+
+
         BukkitTask startGameTask = new BukkitRunnable() {
-            int counter = 3;
+            int counter = START_COUNTDOWN;
 
             @Override
             public void run() {
                 if (counter > 0) {
                     // UI
-                    player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", 1, 20, 1);
+                    player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", TITLE_FADE, TITLE_STAY, TITLE_FADE);
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                             TextComponent.fromLegacyText("Timer Starting..."));
                                 
@@ -100,7 +108,7 @@ public class Game {
                     counter--;
                 } else {
                     // UI
-                    player.sendTitle("§2GO!", "", 1, 20, 1);
+                    player.sendTitle("§2GO!", "", TITLE_FADE, TITLE_STAY, TITLE_FADE);
 
                     // Game
                     timer.startTimer();
@@ -113,7 +121,7 @@ public class Game {
 
                 }
             }
-        }.runTaskTimer(this.plugin, 0L, 20L);
+        }.runTaskTimer(this.plugin, 0L, SECOND_IN_TICKS);
 
         return startGameTask;
     }
@@ -133,7 +141,7 @@ public class Game {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                         TextComponent.fromLegacyText(timerString));
                 }
-        }.runTaskTimer(this.plugin, 61L, 1L);
+        }.runTaskTimer(this.plugin, (SECOND_IN_TICKS * START_COUNTDOWN) + 1L, TIMER_UI_UPDATE_PERIOD);
         return timerTask;
     }
 }
