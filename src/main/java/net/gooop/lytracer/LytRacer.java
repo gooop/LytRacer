@@ -102,6 +102,14 @@ public class LytRacer extends JavaPlugin {
     }
 
     /**
+     * Getter for the games map.
+     * @return The games map.
+     */
+    public HashMap<UUID, Game> getGames() {
+        return games;
+     }
+
+    /**
      * LytRacer singleton getter
      */
     public static LytRacer getLytRacer() {

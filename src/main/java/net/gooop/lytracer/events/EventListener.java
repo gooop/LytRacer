@@ -11,6 +11,8 @@ package net.gooop.lytracer.events;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 // LytRacer Specific Imports
@@ -48,6 +50,20 @@ public class EventListener implements Listener {
         if (playerGameInstance != null && !playerGameInstance.getGameStarted()) {
             event.setTo(event.getFrom().setDirection(event.getTo().getDirection()));
         }
+    }
 
+    /**
+     * Prevent player from taking damage in a game.
+     */
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            // Prevent damage to player in games.
+            Game playerGameInstance = plugin.getGame(player.getUniqueId());
+            if (playerGameInstance != null) {
+                event.setCancelled(true);
+            }
+        }
     }
 }
