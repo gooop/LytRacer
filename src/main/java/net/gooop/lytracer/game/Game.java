@@ -10,8 +10,10 @@ package net.gooop.lytracer.game;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Location;
 
 // Misc imports
 import java.util.UUID;
@@ -22,13 +24,22 @@ import net.gooop.lytracer.timer.*;
 import net.gooop.lytracer.course.*;
 
 public class Game {
+    private static final int TITLE_FADE = 1;
+    private static final int TITLE_STAY = 20;
+    private static final int START_COUNTDOWN = 3;
+    private static final long SECOND_IN_TICKS = 20L; // 20 ticks is one second
+    private static final long TIMER_UI_UPDATE_PERIOD = 1L;
+
     private UUID id;
     private Course course;
     private Player player;
     private final LytRacer plugin;
+    private Location preGameLocation;
+    private ItemStack[] preGameInventory;
 
     private Timer timer;
     private BukkitTask timerTask;
+    private Boolean gameStarted = false;
     
 
     /**
@@ -51,6 +62,16 @@ public class Game {
     public void start() {
         timer = new Timer(course.getNumCheckpoints());
 
+        // Handle player location
+        preGameLocation = player.getLocation();
+        player.teleport(course.getStartLocation());
+
+        // Handle player inventory
+        preGameInventory = player.getInventory().getContents();
+        //TODO: write to file so disconnect doesn't wipe inv
+        player.getInventory().clear();
+        player.getInventory().setContents(course.getCourseInv().getContents());
+
         // Anonymous repeating BukkitRunnable tasks
         anonStartGame();
         timerTask = anonStartTimerUI();
@@ -60,6 +81,17 @@ public class Game {
      * Stops the game
      */
     public void stop() {
+        // Return player to original state
+        if (player.isOnline()) {
+            // Handle player location
+            player.teleport(preGameLocation);
+
+            // Handle player inventory
+            player.getInventory().clear();
+            player.getInventory().setContents(preGameInventory);
+        }
+
+        // Stop timer and cancel task
         timer.stopTimer();
         timerTask.cancel();
     }
@@ -71,6 +103,13 @@ public class Game {
         return id;
     }
 
+    /**
+     * Get game instance ID.
+     */
+    public Boolean getGameStarted() {
+        return gameStarted;
+    }
+
     // Helpers
     /**
      * Function that creates an anonymous BukkitTask that starts the game
@@ -78,13 +117,13 @@ public class Game {
      */
     private BukkitTask anonStartGame() {
         BukkitTask startGameTask = new BukkitRunnable() {
-            int counter = 3;
+            int counter = START_COUNTDOWN;
 
             @Override
             public void run() {
                 if (counter > 0) {
                     // UI
-                    player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", 1, 20, 1);
+                    player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", TITLE_FADE, TITLE_STAY, TITLE_FADE);
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                             TextComponent.fromLegacyText("Timer Starting..."));
                                 
@@ -92,11 +131,11 @@ public class Game {
                     counter--;
                 } else {
                     // UI
-                    player.sendTitle("§2GO!", "", 1, 20, 1);
+                    player.sendTitle("§2GO!", "", TITLE_FADE, TITLE_STAY, TITLE_FADE);
 
                     // Game
                     timer.startTimer();
-                    // TODO: allow player to move
+                    gameStarted = true;
 
                     // Cancel runner
                     super.cancel();
@@ -104,7 +143,7 @@ public class Game {
 
                 }
             }
-        }.runTaskTimer(this.plugin, 0L, 20L);
+        }.runTaskTimer(this.plugin, 0L, SECOND_IN_TICKS);
 
         return startGameTask;
     }
@@ -124,7 +163,7 @@ public class Game {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                         TextComponent.fromLegacyText(timerString));
                 }
-        }.runTaskTimer(this.plugin, 61L, 1L);
+        }.runTaskTimer(this.plugin, (SECOND_IN_TICKS * START_COUNTDOWN) + 1L, TIMER_UI_UPDATE_PERIOD);
         return timerTask;
     }
 }

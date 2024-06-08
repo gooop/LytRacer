@@ -13,24 +13,26 @@ import net.gooop.lytracer.commands.CommandInfo;
 
 // Misc imports
 import java.util.ArrayList;
+import java.util.UUID;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandInfo(name = "start")
-public class StartCommand extends LytCommand {
-    private final String description = "Starts a game.";
+@CommandInfo(name = "stop")
+public class StopCommand extends LytCommand {
+    private final String description = "Stops an ongoing game.";
 
     @Override
     public void run(LytRacer plugin, CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+            UUID gameId = player.getUniqueId();
 
-            plugin.getLogger().info("Calling startNewGame with UUID: " + player.getUniqueId().toString());
-            boolean result = plugin.startNewGame(player);
+            plugin.getLogger().info("Calling stopGame with UUID: " + gameId.toString());
+            boolean result = plugin.stopGame(gameId);
             if (!result) {
-                player.sendMessage("§3You have already started a race!§r");
+                player.sendMessage("§3You are not in a race!§r");
             }
         }
         else {

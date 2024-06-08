@@ -20,6 +20,7 @@ import java.util.HashMap;
 import net.gooop.lytracer.commands.*;
 import net.gooop.lytracer.game.Game;
 import net.gooop.lytracer.course.Course;
+import net.gooop.lytracer.events.EventListener;
 
 public class LytRacer extends JavaPlugin {
     // LytRacer singleton
@@ -45,9 +46,10 @@ public class LytRacer extends JavaPlugin {
         commandRouter.initializeSubCommands();
         this.getCommand("lyt").setExecutor(commandRouter);
 
+        // Register event listener
+        getServer().getPluginManager().registerEvents(new EventListener(instance), this);
+
         this.getLogger().info("======== LytRacer INITIALIZED ========");
-
-
     }
 
     // Called when plugin is disabled
@@ -56,26 +58,38 @@ public class LytRacer extends JavaPlugin {
     }
 
     /**
-     * Starts a new game
-     * @param gameId The game ID to use for the game instance
+     * Starts a new game with the same UUID of the player.
+     * @param player The player who is playing the game.
      */
-    public void startNewGame(UUID gameId, Player player) {
+    public boolean startNewGame(Player player) {
         Course course = new Course();
+        UUID gameId = player.getUniqueId();
         Game game = new Game(gameId, course, player, this);
+
+        boolean alreadyExists = games.containsKey(gameId);
+        if (alreadyExists) {
+            // This player has already started a game.
+            return false;
+        }
+
+        // Add game to map and start game
         games.put(gameId, game);
         game.start();
+        return true;
     }
 
     /**
      * Ends a game
      * @param gameId The game ID used to look up the game instance from the hashmap.
      */
-    public void stopGame(UUID gameId) {
+    public Boolean stopGame(UUID gameId) {
         Game game = games.get(gameId);
         if (game != null) {
             game.stop();
             games.remove(gameId);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -86,6 +100,14 @@ public class LytRacer extends JavaPlugin {
     public Game getGame(UUID gameId) {
         return games.get(gameId);
     }
+
+    /**
+     * Getter for the games map.
+     * @return The games map.
+     */
+    public HashMap<UUID, Game> getGames() {
+        return games;
+     }
 
     /**
      * LytRacer singleton getter

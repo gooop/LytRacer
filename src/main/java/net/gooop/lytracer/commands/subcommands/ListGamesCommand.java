@@ -1,5 +1,5 @@
 /*
- * Name: startCommand
+ * Name: getGamesCommand
  * Description: Command to start a game
  * Author(s): Gooop
  * License: MIT
@@ -8,35 +8,29 @@ package net.gooop.lytracer.commands.subcommands;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.commands.LytCommand;
+import net.gooop.lytracer.game.Game;
 import net.gooop.lytracer.LytRacer;
 import net.gooop.lytracer.commands.CommandInfo;
 
 // Misc imports
 import java.util.ArrayList;
+import java.util.UUID;
+import java.util.Map.Entry;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-@CommandInfo(name = "start")
-public class StartCommand extends LytCommand {
-    private final String description = "Starts a game.";
+@CommandInfo(name = "listgames")
+public class ListGamesCommand extends LytCommand {
+    private final String description = "Lists active games.";
 
     @Override
     public void run(LytRacer plugin, CommandSender sender, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            plugin.getLogger().info("Calling startNewGame with UUID: " + player.getUniqueId().toString());
-            boolean result = plugin.startNewGame(player);
-            if (!result) {
-                player.sendMessage("§3You have already started a race!§r");
-            }
+        sender.sendMessage("§3================== Active Games ==================§r");
+        for (Entry<UUID, Game> game : plugin.getGames().entrySet()) {
+            sender.sendMessage("Game: " + game.getKey().toString());
         }
-        else {
-            //TODO: Implement command block?
-            plugin.getLogger().info("Error, sender of start command needs to be a player.");
-        }
+        sender.sendMessage("§3================== Active Games ==================§r");
     }
 
     @Override
@@ -62,4 +56,5 @@ public class StartCommand extends LytCommand {
         suggestions.add("startsuggest");
         return suggestions;
     }
+    
 }
