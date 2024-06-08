@@ -10,6 +10,7 @@ package net.gooop.lytracer.game;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -34,6 +35,7 @@ public class Game {
     private Player player;
     private final LytRacer plugin;
     private Location preGameLocation;
+    private ItemStack[] preGameInventory;
 
     private Timer timer;
     private BukkitTask timerTask;
@@ -64,6 +66,12 @@ public class Game {
         preGameLocation = player.getLocation();
         player.teleport(course.getStartLocation());
 
+        // Handle player inventory
+        preGameInventory = player.getInventory().getContents();
+        //TODO: write to file so disconnect doesn't wipe inv
+        player.getInventory().clear();
+        player.getInventory().setContents(course.getCourseInv().getContents());
+
         // Anonymous repeating BukkitRunnable tasks
         anonStartGame();
         timerTask = anonStartTimerUI();
@@ -73,9 +81,14 @@ public class Game {
      * Stops the game
      */
     public void stop() {
-        // Handle player location
+        // Return player to original state
         if (player.isOnline()) {
+            // Handle player location
             player.teleport(preGameLocation);
+
+            // Handle player inventory
+            player.getInventory().clear();
+            player.getInventory().setContents(preGameInventory);
         }
 
         // Stop timer and cancel task
