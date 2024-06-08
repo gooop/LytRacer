@@ -59,6 +59,7 @@ public class LytRacer extends JavaPlugin {
 
     /**
      * Starts a new game with the same UUID of the player.
+     * 
      * @param player The player who is playing the game.
      */
     public boolean startNewGame(Player player) {
@@ -80,6 +81,7 @@ public class LytRacer extends JavaPlugin {
 
     /**
      * Ends a game
+     * 
      * @param gameId The game ID used to look up the game instance from the hashmap.
      */
     public Boolean stopGame(UUID gameId) {
@@ -94,6 +96,7 @@ public class LytRacer extends JavaPlugin {
 
     /**
      * Getter for a game based on ID
+     * 
      * @param gameId The ID of the game to get.
      * @return The game instance with the associated ID.
      */
@@ -103,11 +106,12 @@ public class LytRacer extends JavaPlugin {
 
     /**
      * Getter for the games map.
+     * 
      * @return The games map.
      */
     public HashMap<UUID, Game> getGames() {
         return games;
-     }
+    }
 
     /**
      * LytRacer singleton getter

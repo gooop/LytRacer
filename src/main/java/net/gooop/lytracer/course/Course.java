@@ -39,14 +39,14 @@ public class Course {
     public int getNumCheckpoints() {
         return numCheckpoints;
     }
-    
+
     /**
      * Getter for startLocation
      */
     public Location getStartLocation() {
         return startLocation;
     }
-    
+
     /**
      * Getter for endLocation
      */

@@ -17,10 +17,13 @@ public class Timer {
 
     /**
      * Constructor for Timer that includes the number of checkpoints.
-     * @param numCheckpoints The number of checkpoints the course has. Note: The splits will contain all checkpoints and the end time.
+     * 
+     * @param numCheckpoints The number of checkpoints the course has. Note: The
+     *                       splits will contain all checkpoints and the end time.
      */
     public Timer(int numCheckpoints) {
-        // Set the size of the splits array to the number of checkpoints + 1 (for the end)
+        // Set the size of the splits array to the number of checkpoints + 1 (for the
+        // end)
         splits = new long[numCheckpoints + 1];
     }
 
@@ -32,7 +35,7 @@ public class Timer {
         timerRunning = true;
     }
 
-    /** 
+    /**
      * Stops the timer and saves the time. Should be used directly for failures.
      */
     public void stopTimer() {
@@ -41,7 +44,8 @@ public class Timer {
     }
 
     /*
-     * Saves the split time for a given checkpoint, calls stopTimer() if the last checkpoint has been reached
+     * Saves the split time for a given checkpoint, calls stopTimer() if the last
+     * checkpoint has been reached
      */
     public void saveSplit() {
         if (currentCheckpoint < splits.length) {
@@ -54,11 +58,12 @@ public class Timer {
     }
 
     /**
-    * Returns the the current time (in milliseconds) of a running timer or the total
-    * time of a previously run timer.
-    *
-    * @return time (in milliseconds)
-    */
+     * Returns the the current time (in milliseconds) of a running timer or the
+     * total
+     * time of a previously run timer.
+     *
+     * @return time (in milliseconds)
+     */
     public long getTime() {
         if (timerRunning) {
             return System.currentTimeMillis() - startTime;
@@ -66,17 +71,17 @@ public class Timer {
             return endTime;
         }
     }
-    
+
     /**
-    * Returns the the current time (in seconds) of a running timer or the total
-    * time of a previously run timer.
-    *
-    * @return time (in seconds)
-    */
+     * Returns the the current time (in seconds) of a running timer or the total
+     * time of a previously run timer.
+     *
+     * @return time (in seconds)
+     */
     public float getTimeSeconds() {
         return getTime() / 1000.0f;
     }
-    
+
     /**
      * Returns the splits array (in milliseconds)
      */
@@ -102,14 +107,14 @@ public class Timer {
     public float getLastSplitSeconds() {
         if (currentCheckpoint == 0) {
             return 0.0f;
-        }
-        else {
+        } else {
             return splits[currentCheckpoint] / 1000.0f;
         }
     }
 
     /**
      * Returns timerRunning
+     * 
      * @return Boolean, whether the timer is running or not.
      */
     public Boolean getTimerRunning() {

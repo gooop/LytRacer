@@ -14,15 +14,14 @@ import org.junit.jupiter.api.Test;
 // UUT imports
 //import net.gooop.lytracer.game.Game;
 
-
 public class GameTest {
     @Test
     public void start() {
-        //TODO: test start method here
+        // TODO: test start method here
     }
 
     @Test
     public void stop() {
-        //TODO: test stop method here
+        // TODO: test stop method here
     }
 }

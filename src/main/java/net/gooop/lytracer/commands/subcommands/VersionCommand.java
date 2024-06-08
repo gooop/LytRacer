@@ -34,13 +34,13 @@ public class VersionCommand extends LytCommand {
 
     @Override
     public String usage() {
-        //TODO: implement
+        // TODO: implement
         return "";
     }
 
     @Override
     public void help(LytRacer plugin, CommandSender sender, String[] args) {
-        //TODO: implement
+        // TODO: implement
     }
 
     @Override

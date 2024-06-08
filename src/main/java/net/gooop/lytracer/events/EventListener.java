@@ -24,13 +24,14 @@ public class EventListener implements Listener {
 
     /**
      * Constructor for EventListener class that includes plugin singleton
+     * 
      * @param plugin The plugin singleton.
      */
     public EventListener(LytRacer plugin) {
         this.plugin = plugin;
     }
-    //TODO: override onDamageEvent for players in a game
-    //TODO: override block break and place events for players in a game
+    // TODO: override onDamageEvent for players in a game
+    // TODO: override block break and place events for players in a game
 
     /**
      * Stop a game when a player in a game leaves.
@@ -45,7 +46,8 @@ public class EventListener implements Listener {
      */
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        // Arrest movement if game player is in has not started (allows them to look around).
+        // Arrest movement if game player is in has not started (allows them to look
+        // around).
         Game playerGameInstance = plugin.getGame(event.getPlayer().getUniqueId());
         if (playerGameInstance != null && !playerGameInstance.getGameStarted()) {
             event.setTo(event.getFrom().setDirection(event.getTo().getDirection()));

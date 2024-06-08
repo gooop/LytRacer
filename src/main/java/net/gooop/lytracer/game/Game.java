@@ -40,11 +40,12 @@ public class Game {
     private Timer timer;
     private BukkitTask timerTask;
     private Boolean gameStarted = false;
-    
 
     /**
-     * Constructor for Game class that includes id, course, player, and plugin singleton
-     * @param id The game ID assigned to this game instance.
+     * Constructor for Game class that includes id, course, player, and plugin
+     * singleton
+     * 
+     * @param id     The game ID assigned to this game instance.
      * @param course The course associated with this game instance.
      * @param player The player associated with this game instance.
      * @param plugin The plugin singleton.
@@ -68,7 +69,7 @@ public class Game {
 
         // Handle player inventory
         preGameInventory = player.getInventory().getContents();
-        //TODO: write to file so disconnect doesn't wipe inv
+        // TODO: write to file so disconnect doesn't wipe inv
         player.getInventory().clear();
         player.getInventory().setContents(course.getCourseInv().getContents());
 
@@ -76,7 +77,7 @@ public class Game {
         anonStartGame();
         timerTask = anonStartTimerUI();
     }
-    
+
     /**
      * Stops the game
      */
@@ -113,6 +114,7 @@ public class Game {
     // Helpers
     /**
      * Function that creates an anonymous BukkitTask that starts the game
+     * 
      * @return
      */
     private BukkitTask anonStartGame() {
@@ -126,7 +128,7 @@ public class Game {
                     player.sendTitle("§4" + String.valueOf(counter), "§lStarting!", TITLE_FADE, TITLE_STAY, TITLE_FADE);
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                             TextComponent.fromLegacyText("Timer Starting..."));
-                                
+
                     // Game
                     counter--;
                 } else {
@@ -139,7 +141,6 @@ public class Game {
 
                     // Cancel runner
                     super.cancel();
-                    
 
                 }
             }
@@ -149,8 +150,10 @@ public class Game {
     }
 
     /**
-     * Function that creates an anonymous BukkitTask that repeatedly calls the timer UI
+     * Function that creates an anonymous BukkitTask that repeatedly calls the timer
+     * UI
      * It ouputs the total time and last split time.
+     * 
      * @return BukkitTask timer task object
      */
     private BukkitTask anonStartTimerUI() {
@@ -159,10 +162,11 @@ public class Game {
             public void run() {
                 // UI
                 float lastSplit = timer.getLastSplitSeconds();
-                String timerString = "Time: §e" + String.valueOf(timer.getTimeSeconds()) + "(s) §f§l - §r Last Split: §e" + String.valueOf(lastSplit);
+                String timerString = "Time: §e" + String.valueOf(timer.getTimeSeconds())
+                        + "(s) §f§l - §r Last Split: §e" + String.valueOf(lastSplit);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                         TextComponent.fromLegacyText(timerString));
-                }
+            }
         }.runTaskTimer(this.plugin, (SECOND_IN_TICKS * START_COUNTDOWN) + 1L, TIMER_UI_UPDATE_PERIOD);
         return timerTask;
     }

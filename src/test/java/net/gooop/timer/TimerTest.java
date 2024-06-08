@@ -35,7 +35,7 @@ public class TimerTest {
         // Assert
         assertTrue(timer.getTime() > 0);
     }
-    
+
     @Test
     public void timerRunningReturnsTrueWhenTimerStarted() {
         // Arrange
@@ -93,8 +93,7 @@ public class TimerTest {
             secondTime = timer.getTime();
             TimeUnit.SECONDS.sleep(1);
             thirdTime = timer.getTime();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception occurred when trying to sleep");
         }
 
@@ -121,7 +120,7 @@ public class TimerTest {
         // 10000 is 10 seconds in milliseconds
         assertTrue(Math.abs(timer.getTime() - 10000) < 20);
     }
-    
+
     @Test
     public void getTimeSecondsUnder1Second() {
         // Arrange
@@ -244,7 +243,7 @@ public class TimerTest {
         // Assert
         assertEquals(0.0f, lastSplit);
     }
-    
+
     @Test
     public void getLastSplitSecondsReturnsLastSplit1Checkpoint() {
         // Arrange
@@ -279,11 +278,10 @@ public class TimerTest {
             timer.saveSplit();
             try {
                 TimeUnit.MILLISECONDS.sleep(waitTime);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Exception occurred when trying to sleep");
             }
-            
+
             // If i == 15, the last saved split is actually the end of the course.
             if (i != 15) {
                 splits[i] = timer.getLastSplitSeconds();

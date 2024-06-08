@@ -32,9 +32,8 @@ public class StartCommand extends LytCommand {
             if (!result) {
                 player.sendMessage("§3You have already started a race!§r");
             }
-        }
-        else {
-            //TODO: Implement command block?
+        } else {
+            // TODO: Implement command block?
             plugin.getLogger().info("Error, sender of start command needs to be a player.");
         }
     }
@@ -46,13 +45,13 @@ public class StartCommand extends LytCommand {
 
     @Override
     public String usage() {
-        //TODO: implement
+        // TODO: implement
         return "";
     }
 
     @Override
     public void help(LytRacer plugin, CommandSender sender, String[] args) {
-        //TODO: implement
+        // TODO: implement
     }
 
     @Override
