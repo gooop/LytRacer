@@ -10,11 +10,14 @@ package net.gooop.lytracer;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 // Misc imports
 import java.util.UUID;
 import java.util.HashMap;
+import java.io.File;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.commands.*;
@@ -31,7 +34,12 @@ public class LytRacer extends JavaPlugin {
 
     // Member variables
     private HashMap<UUID, Game> games = new HashMap<>();
+    private File courseDataFile;
+    private FileConfiguration courseData;
+    private File playerDataFile;
+    private FileConfiguration playerData;
 
+    // Virtual Functions
     // Called when plugin is first enabled
     @Override
     public void onEnable() {
@@ -41,13 +49,28 @@ public class LytRacer extends JavaPlugin {
         this.getLogger().info("======== INITIALIZING LytRacer ========");
 
         // Start command router, initialize commands, and register the router
+        this.getLogger().info("== Registering Commands ==");
         commandRouter = new CommandRouter(instance);
         commandRouter.scanForSubCommands();
         commandRouter.initializeSubCommands();
         this.getCommand("lyt").setExecutor(commandRouter);
 
         // Register event listener
+        this.getLogger().info("==  Registering Events  ==");
         getServer().getPluginManager().registerEvents(new EventListener(instance), this);
+        this.getLogger().info("Success");
+
+        // Move yml files out of jar
+        this.getLogger().info("==   Creating Configs   ==");
+        // Default config
+        saveDefaultConfig();
+        // Course data config
+        createCourseData();
+
+        // Player data config
+        createPlayerData();
+
+        this.getLogger().info("Success");
 
         this.getLogger().info("======== LytRacer INITIALIZED ========");
     }
@@ -57,6 +80,7 @@ public class LytRacer extends JavaPlugin {
     public void onDisable() {
     }
 
+    // Gameplay functions
     /**
      * Starts a new game with the same UUID of the player.
      * 
@@ -94,6 +118,55 @@ public class LytRacer extends JavaPlugin {
         return false;
     }
 
+    // Helpers
+    public void createCourseData() {
+        String filename = "coursedata.yml";
+        courseDataFile = new File(getDataFolder(), filename);
+        if (!courseDataFile.exists()) {
+            courseDataFile.getParentFile().mkdirs();
+            saveResource(filename, false);
+        }
+
+        courseData = YamlConfiguration.loadConfiguration(courseDataFile);
+    }
+    
+    public void createPlayerData() {
+        String filename = "playerdata.yml";
+        playerDataFile = new File(getDataFolder(), filename);
+        if (!playerDataFile.exists()) {
+            playerDataFile.getParentFile().mkdirs();
+            saveResource(filename, false);
+        }
+
+        playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+    }
+
+    // Getters and setters
+    /**
+     * LytRacer singleton getter
+     */
+    public static LytRacer getLytRacer() {
+        return instance;
+    }
+
+    /**
+     * Getter for the course data
+     * @param gameId
+     * @return
+     */
+    public FileConfiguration getCourseData() {
+        return courseData;
+    }
+
+    /**
+     * Getter for the player data
+     * @param gameId
+     * @return
+     */
+    public FileConfiguration getPlayerData() {
+        return playerData;
+    }
+    
     /**
      * Getter for a game based on ID
      * 
@@ -114,13 +187,6 @@ public class LytRacer extends JavaPlugin {
     }
 
     /**
-     * LytRacer singleton getter
-     */
-    public static LytRacer getLytRacer() {
-        return instance;
-    }
-
-    /**
      * LytRacer version getter
      */
     public static String getVersion() {
@@ -128,4 +194,6 @@ public class LytRacer extends JavaPlugin {
         String version = (pkg != null) ? pkg.getImplementationVersion() : null;
         return (version != null) ? version : "Unknown";
     }
+
+    
 }
