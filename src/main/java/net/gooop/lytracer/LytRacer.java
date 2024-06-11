@@ -12,6 +12,7 @@ package net.gooop.lytracer;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
 // Misc imports
@@ -22,6 +23,7 @@ import java.io.File;
 // LytRacer Specific Imports
 import net.gooop.lytracer.commands.*;
 import net.gooop.lytracer.game.Game;
+import net.gooop.lytracer.serializable.PlayerDataSerialized;
 import net.gooop.lytracer.course.Course;
 import net.gooop.lytracer.events.EventListener;
 
@@ -60,16 +62,17 @@ public class LytRacer extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EventListener(instance), this);
         this.getLogger().info("Success");
 
-        // Move yml files out of jar
+        // Do config stuff
         this.getLogger().info("==   Creating Configs   ==");
         // Default config
         saveDefaultConfig();
+        this.reloadConfig();
         // Course data config
+        // ConfigurationSerialization.registerClass(CourseData.class); Not implemented yet
         createCourseData();
-
         // Player data config
+        ConfigurationSerialization.registerClass(PlayerDataSerialized.class);
         createPlayerData();
-
         this.getLogger().info("Success");
 
         this.getLogger().info("======== LytRacer INITIALIZED ========");
@@ -80,7 +83,7 @@ public class LytRacer extends JavaPlugin {
     public void onDisable() {
     }
 
-    // Gameplay functions
+    // Gameplay Functions
     /**
      * Starts a new game with the same UUID of the player.
      * 
@@ -129,7 +132,7 @@ public class LytRacer extends JavaPlugin {
 
         courseData = YamlConfiguration.loadConfiguration(courseDataFile);
     }
-    
+
     public void createPlayerData() {
         String filename = "playerdata.yml";
         playerDataFile = new File(getDataFolder(), filename);
@@ -141,7 +144,7 @@ public class LytRacer extends JavaPlugin {
         playerData = YamlConfiguration.loadConfiguration(playerDataFile);
     }
 
-    // Getters and setters
+    // Getters and Setters
     /**
      * LytRacer singleton getter
      */
@@ -151,6 +154,7 @@ public class LytRacer extends JavaPlugin {
 
     /**
      * Getter for the course data
+     * 
      * @param gameId
      * @return
      */
@@ -160,13 +164,28 @@ public class LytRacer extends JavaPlugin {
 
     /**
      * Getter for the player data
+     * 
      * @param gameId
      * @return
      */
     public FileConfiguration getPlayerData() {
         return playerData;
     }
-    
+
+    /**
+     * Getter for course data file
+     */
+    public File getCourseDataFile() {
+        return courseDataFile;
+    }
+
+    /**
+     * Getter for player data file
+     */
+    public File getPlayerDataFile() {
+        return playerDataFile;
+    }
+
     /**
      * Getter for a game based on ID
      * 
@@ -195,5 +214,4 @@ public class LytRacer extends JavaPlugin {
         return (version != null) ? version : "Unknown";
     }
 
-    
 }
