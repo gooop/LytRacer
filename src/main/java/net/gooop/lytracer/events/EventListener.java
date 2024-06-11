@@ -18,8 +18,8 @@ import org.bukkit.event.EventHandler;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.LytRacer;
-import net.gooop.lytracer.data.PlayerData;
 import net.gooop.lytracer.game.Game;
+import net.gooop.lytracer.serializable.PlayerDataSerialized;
 
 public class EventListener implements Listener {
     private final LytRacer plugin;
@@ -39,32 +39,27 @@ public class EventListener implements Listener {
      */
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        plugin.getLogger().info(Boolean.toString(plugin.getPlayerData().contains(player.getUniqueId().toString(), false)));
         plugin.stopGame(event.getPlayer().getUniqueId());
     }
 
     /**
      * Give player items back and reset location when player joins.
+     * 
      * @param event
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        plugin.getLogger().info("playerjoin");
+        // Teleport player and set inv if they have an entry in the playerdata.yml
         Player player = event.getPlayer();
-        plugin.getLogger().info(player.getUniqueId().toString());
-        PlayerData playerData = (PlayerData) plugin.getPlayerData().get(player.getUniqueId().toString());
-        plugin.getLogger().info(Boolean.toString(plugin.getPlayerData().contains(player.getUniqueId().toString(), false)));
+        PlayerDataSerialized playerData = (PlayerDataSerialized) plugin.getPlayerConfig()
+                .get(player.getUniqueId().toString());
         if (playerData != null) {
-            plugin.getLogger().info("hello");
             player.teleport(playerData.playerLocation);
             player.getInventory().clear();
             player.getInventory().setContents(playerData.playerInventory);
+            plugin.getPlayerConfig().removePlayer(player.getUniqueId());
+            plugin.getPlayerConfig().save();
         }
-        else {
-            plugin.getLogger().info("null");
-        }
-        //TODO: Cast object and teleport player and set inv
     }
 
     /**

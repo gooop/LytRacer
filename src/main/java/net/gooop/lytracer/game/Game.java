@@ -17,13 +17,12 @@ import org.bukkit.Location;
 
 // Misc imports
 import java.util.UUID;
-import java.io.IOException;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.*;
 import net.gooop.lytracer.timer.*;
 import net.gooop.lytracer.course.*;
-import net.gooop.lytracer.data.PlayerData;
+import net.gooop.lytracer.serializable.PlayerDataSerialized;
 
 public class Game {
     private static final int TITLE_FADE = 1;
@@ -76,10 +75,8 @@ public class Game {
         player.getInventory().setContents(course.getCourseInv().getContents());
 
         // Save player data (pos, inv) in case they disconnect
-        if (!savePlayerData()) {
-            plugin.getLogger().warning("Could not save player (player UUID: " + player.getUniqueId().toString()
-                    + ") data. If player disconnects during the race, they will lose their items!");
-        }
+        PlayerDataSerialized playerData = new PlayerDataSerialized(preGameLocation, preGameInventory);
+        plugin.getPlayerConfig().savePlayer(playerData, player.getUniqueId());
 
         // Anonymous repeating BukkitRunnable tasks
         anonStartGame();
@@ -100,9 +97,11 @@ public class Game {
             player.getInventory().setContents(preGameInventory);
 
             // Remove player data entry from yml file
-            if (!clearPlayerData()) {
+            if (!plugin.getPlayerConfig().removePlayer(player.getUniqueId())) {
                 plugin.getLogger().warning("Could not clear player (player UUID: " + player.getUniqueId().toString()
                         + ") data. This could cause inventory issues. Please manually remove the data for the UUID from LytRacer/playerdata.yml");
+            } else {
+                plugin.getPlayerConfig().save();
             }
         }
 
@@ -169,39 +168,6 @@ public class Game {
             }
         }.runTaskTimer(this.plugin, (SECOND_IN_TICKS * START_COUNTDOWN) + 1L, TIMER_UI_UPDATE_PERIOD);
         return timerTask;
-    }
-
-    /**
-     * Function that saves player data to yml
-     */
-    private Boolean savePlayerData() {
-        // Possibly make async for larger servers
-        PlayerData playerData = new PlayerData(preGameLocation, preGameInventory);
-        plugin.getPlayerData().set(player.getUniqueId().toString(), playerData);
-        try {
-            plugin.getPlayerData().save(plugin.getPlayerDataFile());
-        } catch (IOException e) {
-            return false;
-        }
-
-        return true;
-    }
-    
-    /**
-     * Function that clears player data from yml
-     */
-    private Boolean clearPlayerData() {
-        // Possibly make async for larger servers
-        plugin.getLogger().info(Boolean.toString(plugin.getPlayerData().contains(player.getUniqueId().toString(), false)));
-        plugin.getPlayerData().set(player.getUniqueId().toString(), null);
-        try {
-            plugin.getPlayerData().save(plugin.getPlayerDataFile());
-        }
-        catch (IOException e) {
-            return false;
-        }
-
-        return true;
     }
 
     // Getters and Setters

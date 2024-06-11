@@ -1,11 +1,11 @@
 /*
- * Name: PlayerData
- * Description: 
+ * Name: PlayerDataSerialized
+ * Description: Helper class for serializing PlayerData
  * Author(s): Gooop
  * License: MIT
  */
 
-package net.gooop.lytracer.data;
+package net.gooop.lytracer.serializable;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.Location;
@@ -20,11 +20,11 @@ import java.util.List;
 /**
  * Helper class to store player data in yml.
  */
-public class PlayerData implements ConfigurationSerializable {
+public class PlayerDataSerialized implements ConfigurationSerializable {
     public Location playerLocation;
     public ItemStack[] playerInventory;
 
-    public PlayerData(Location loc, ItemStack[] inv) {
+    public PlayerDataSerialized(Location loc, ItemStack[] inv) {
         this.playerLocation = loc;
         this.playerInventory = inv;
     }
@@ -37,7 +37,7 @@ public class PlayerData implements ConfigurationSerializable {
         return data;
     }
 
-    public static PlayerData deserialize(Map<String, Object> data) {
+    public static PlayerDataSerialized deserialize(Map<String, Object> data) {
         Location location = null;
         ItemStack[] inventory = null;
         if (data.containsKey("playerLocation")) {
@@ -50,6 +50,6 @@ public class PlayerData implements ConfigurationSerializable {
                 inventory = inventoryList.toArray(new ItemStack[0]);
             }
         }
-        return new PlayerData(location, inventory);
+        return new PlayerDataSerialized(location, inventory);
     }
 }
