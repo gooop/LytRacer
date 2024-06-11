@@ -6,19 +6,19 @@
  */
 package net.gooop.lytracer.commands.subcommands;
 
-// LytRacer Specific Imports
-import net.gooop.lytracer.commands.LytCommand;
-import net.gooop.lytracer.game.Game;
-import net.gooop.lytracer.LytRacer;
-import net.gooop.lytracer.commands.CommandInfo;
+// Bukkit/Spigot/Paper Specific Imports
+import org.bukkit.command.CommandSender;
 
 // Misc imports
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Map.Entry;
 
-// Bukkit/Spigot/Paper Specific Imports
-import org.bukkit.command.CommandSender;
+// LytRacer Specific Imports
+import net.gooop.lytracer.commands.LytCommand;
+import net.gooop.lytracer.game.Game;
+import net.gooop.lytracer.LytRacer;
+import net.gooop.lytracer.commands.CommandInfo;
 
 @CommandInfo(name = "listgames")
 public class ListGamesCommand extends LytCommand {
@@ -53,7 +53,7 @@ public class ListGamesCommand extends LytCommand {
     public ArrayList<String> tabCompleteSuggestions(String[] args) {
         // TODO Auto-generated method stub
         ArrayList<String> suggestions = new ArrayList<>();
-        suggestions.add("startsuggest");
+        suggestions.add("");
         return suggestions;
     }
 
