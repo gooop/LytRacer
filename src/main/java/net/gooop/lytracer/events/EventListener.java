@@ -58,7 +58,6 @@ public class EventListener implements Listener {
             player.getInventory().clear();
             player.getInventory().setContents(playerData.playerInventory);
             plugin.getPlayerConfig().removePlayer(player.getUniqueId());
-            plugin.getPlayerConfig().save();
         }
     }
 

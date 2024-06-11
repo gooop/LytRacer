@@ -100,8 +100,6 @@ public class Game {
             if (!plugin.getPlayerConfig().removePlayer(player.getUniqueId())) {
                 plugin.getLogger().warning("Could not clear player (player UUID: " + player.getUniqueId().toString()
                         + ") data. This could cause inventory issues. Please manually remove the data for the UUID from LytRacer/playerdata.yml");
-            } else {
-                plugin.getPlayerConfig().save();
             }
         }
 

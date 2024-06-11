@@ -10,20 +10,19 @@ package net.gooop.lytracer;
 
 // Bukkit/Spigot/Paper Specific Imports
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
 // Misc imports
 import java.util.UUID;
 import java.util.HashMap;
-import java.io.File;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.commands.*;
+import net.gooop.lytracer.config.CourseConfig;
 import net.gooop.lytracer.config.PlayerConfig;
 import net.gooop.lytracer.game.Game;
+import net.gooop.lytracer.serializable.CourseDataSerialized;
 import net.gooop.lytracer.serializable.PlayerDataSerialized;
 import net.gooop.lytracer.course.Course;
 import net.gooop.lytracer.events.EventListener;
@@ -37,8 +36,7 @@ public class LytRacer extends JavaPlugin {
 
     // Member variables
     private HashMap<UUID, Game> games = new HashMap<>();
-    private File courseDataFile;
-    private FileConfiguration courseData;
+    private CourseConfig courseConfig;
     private PlayerConfig playerConfig;
 
     // Virtual Functions
@@ -68,9 +66,9 @@ public class LytRacer extends JavaPlugin {
         this.saveDefaultConfig();
         this.getConfig();
         // Course data config
-        // ConfigurationSerialization.registerClass(CourseData.class); Not implemented
-        // yet
-        createCourseData();
+        ConfigurationSerialization.registerClass(CourseDataSerialized.class);
+        courseConfig = new CourseConfig(instance);
+        courseConfig.load();
         // Player data config
         ConfigurationSerialization.registerClass(PlayerDataSerialized.class);
         playerConfig = new PlayerConfig(instance);
@@ -123,18 +121,6 @@ public class LytRacer extends JavaPlugin {
         return false;
     }
 
-    // Helpers
-    public void createCourseData() {
-        String filename = "coursedata.yml";
-        courseDataFile = new File(getDataFolder(), filename);
-        if (!courseDataFile.exists()) {
-            courseDataFile.getParentFile().mkdirs();
-            saveResource(filename, false);
-        }
-
-        courseData = YamlConfiguration.loadConfiguration(courseDataFile);
-    }
-
     // Getters and Setters
     /**
      * LytRacer singleton getter
@@ -144,30 +130,17 @@ public class LytRacer extends JavaPlugin {
     }
 
     /**
-     * Getter for the course data
-     * 
-     * @param gameId
-     * @return
+     * Getter for the course config
      */
-    public FileConfiguration getCourseData() {
-        return courseData;
+    public CourseConfig getCourseData() {
+        return courseConfig;
     }
 
     /**
      * Getter for the player data
-     * 
-     * @param gameId
-     * @return
      */
     public PlayerConfig getPlayerConfig() {
         return playerConfig;
-    }
-
-    /**
-     * Getter for course data file
-     */
-    public File getCourseDataFile() {
-        return courseDataFile;
     }
 
     /**

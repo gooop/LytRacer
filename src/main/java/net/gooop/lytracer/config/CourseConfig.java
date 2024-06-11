@@ -1,6 +1,6 @@
 /*
- * Name: PlayerConfig
- * Description: Wrapper class for custom player config
+ * Name: CourseConfig
+ * Description: Wrapper class for custom course config
  * Author(s): Gooop
  * License: MIT
  */
@@ -14,42 +14,38 @@ import org.bukkit.configuration.file.YamlConfiguration;
 // Misc Imports
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 // LytRacer Specific Imports
 import net.gooop.lytracer.LytRacer;
-import net.gooop.lytracer.serializable.PlayerDataSerialized;
-
-// TODO: use as a starting point to implement custom wrapper for FileConfiguration class. Quick and dirty for now.
+//import net.gooop.lytracer.serializable.CourseDataSerialized;
 
 /**
- * Wrapper class for custom player config
+ * Wrapper class for custom course config
  * <p>
  * Implements save, contains, get, reload, and load from FileConfiguration
  * <p>
- * Also implements bespoke save and remove methods
  */
-public class PlayerConfig {
-    private File playerConfigFile;
-    private FileConfiguration playerConfig;
+public class CourseConfig {
+    private File courseConfigFile;
+    private FileConfiguration courseConfig;
     private final LytRacer plugin;
 
-    public PlayerConfig(LytRacer plugin) {
+    public CourseConfig(LytRacer plugin) {
         this.plugin = plugin;
     }
 
     /**
-     * Loads the playerdata File into the Player Data Configuration
+     * Loads the coursedata File into the Course Data Configuration
      */
     public void load() {
-        String filename = "playerdata.yml";
-        playerConfigFile = new File(plugin.getDataFolder(), filename);
-        if (!playerConfigFile.exists()) {
-            playerConfigFile.getParentFile().mkdirs();
+        String filename = "coursedata.yml";
+        courseConfigFile = new File(plugin.getDataFolder(), filename);
+        if (!courseConfigFile.exists()) {
+            courseConfigFile.getParentFile().mkdirs();
             plugin.saveResource(filename, false);
         }
 
-        playerConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
+        courseConfig = YamlConfiguration.loadConfiguration(courseConfigFile);
     }
 
     /**
@@ -63,7 +59,7 @@ public class PlayerConfig {
      * @return Requested Object.
      */
     public Object get(String path, Object def) {
-        return playerConfig.get(path, def);
+        return courseConfig.get(path, def);
     }
 
     /**
@@ -77,7 +73,7 @@ public class PlayerConfig {
      * @return Requested Object.
      */
     public Object get(String path) {
-        return playerConfig.get(path);
+        return courseConfig.get(path);
     }
 
     /**
@@ -97,69 +93,49 @@ public class PlayerConfig {
      *         value exist and the boolean parameter for this method is true.
      */
     public Boolean contains(String path, Boolean ignoreDefault) {
-        return playerConfig.contains(path, ignoreDefault);
+        return courseConfig.contains(path, ignoreDefault);
     }
 
+
     /**
-     * Saves the Player Data Configuration to the Player Data File
+     * Saves the Course Data Configuration to the Course Data File
      * 
      */
     public void save() {
         try {
-            playerConfig.save(playerConfigFile);
+            courseConfig.save(courseConfigFile);
         } catch (IOException e) {
-            System.out.println("Couldn't load playerdata.yml");
+            System.out.println("Couldn't load coursedata.yml");
         }
     }
 
+
     /**
-     * Reloads the Player Data Configuration from the Player Data File
+     * Reloads the Course Data Configuration from the Course Data File
      *
      */
     public void reload() {
-        playerConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
-    }
-
-    /**
-     * Saves the Player info to the Player Data File (saves)
-     * 
-     * @param player
-     */
-    public void savePlayer(PlayerDataSerialized playerData, UUID playerId) {
-        // Possibly make async for larger servers
-        this.playerConfig.set(playerId.toString(), playerData);
-        this.save();
-    }
-
-    /**
-     * Remove a player from the Player Data Configuration (saves).
-     */
-    public Boolean removePlayer(UUID playerId) {
-        // Possibly make async for larger servers
-        if (this.playerConfig.contains(playerId.toString())) {
-            this.playerConfig.set(playerId.toString(), null);
-            this.save();
-            return true;
-        }
-        return false;
+        courseConfig = YamlConfiguration.loadConfiguration(courseConfigFile);
     }
 
     // Getters and Setters
     /**
-     * Getter for the player data file
+     * Getter for the course data file
      * 
-     * @return the player data file
+     * @return the course data file
      */
-    public File getPlayerConfigFile() {
-        return this.playerConfigFile;
+    public File getCourseConfigFile() {
+        return this.courseConfigFile;
     }
 
     /**
-     * Getter for the player data FileConfiguration
+     * Getter for the course data FileConfiguration
      * 
-     * @return the player data FileConfiguration
+     * @return the course data FileConfiguration
      */
-    public FileConfiguration getPlayerConfig() {
-        return this.playerConfig;
+    public FileConfiguration getCourseConfig() {
+        return this.courseConfig;
     }
+
+    
 }
