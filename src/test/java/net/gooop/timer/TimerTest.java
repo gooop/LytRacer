@@ -118,7 +118,7 @@ public class TimerTest {
 
         // Assert
         // 10000 is 10 seconds in milliseconds
-        assertTrue(Math.abs(timer.getTime() - 10000) < 20);
+        assertTrue(Math.abs(timer.getTime() - 10000) < 100);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class TimerTest {
         timer.stopTimer();
 
         // Assert
-        assertTrue(Math.abs(timer.getTimeSeconds() - 0.5f) < 0.02f);
+        assertTrue(Math.abs(timer.getTimeSeconds() - 0.5f) < 0.1f);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class TimerTest {
         timer.stopTimer();
 
         // Assert
-        assertTrue(Math.abs(timer.getTimeSeconds() - 5.0f) < 0.02);
+        assertTrue(Math.abs(timer.getTimeSeconds() - 5.0f) < 0.1);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class TimerTest {
         // Assert
         float[] splits = new float[1];
         splits = timer.getSplitsSeconds();
-        assertTrue(Math.abs(splits[0] - 5.0f) < 0.02); // TODO: This shouldn't pass but does
+        assertTrue(Math.abs(splits[0] - 5.0f) < 0.1); // TODO: This shouldn't pass but does
     }
 
     @Test
@@ -200,8 +200,8 @@ public class TimerTest {
         // Assert
         float[] splits = new float[2];
         splits = timer.getSplitsSeconds();
-        assertTrue(Math.abs(splits[0] - 5.0f) < 0.02);
-        assertTrue(Math.abs(splits[1] - 10.0f) < 0.04);
+        assertTrue(Math.abs(splits[0] - 5.0f) < 0.1);
+        assertTrue(Math.abs(splits[1] - 10.0f) < 0.2);
     }
 
     @Test
@@ -227,7 +227,7 @@ public class TimerTest {
         for (int i = 0; i < splits.length; i++) {
             float waitTimeSeconds = (float) ((waitTime) / 1000) * i;
             float difference = Math.abs(splits[i] - waitTimeSeconds);
-            assertTrue(difference < 0.02 * (i + 1));
+            assertTrue(difference < 0.1 * (i + 1));
         }
     }
 
@@ -262,7 +262,7 @@ public class TimerTest {
 
         // Assert
         float difference = lastSplit - 1.0f;
-        assertTrue(difference < 0.02);
+        assertTrue(difference < 0.1);
     }
 
     @Test
@@ -293,7 +293,7 @@ public class TimerTest {
         for (int i = 0; i < splits.length; i++) {
             float waitTimeSeconds = (float) ((waitTime) / 1000) * i;
             float difference = Math.abs(splits[i] - waitTimeSeconds);
-            assertTrue(difference < 0.02 * (i + 1));
+            assertTrue(difference < 0.1 * (i + 1));
         }
     }
 

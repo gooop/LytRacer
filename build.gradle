@@ -7,42 +7,62 @@
 
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    alias(libs.plugins.shadow)
     id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java {
+    // Compile with this JDK, independent of the JVM running Gradle.
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
 
-group 'spigot.gradle.project'
-version '1.20.4-0.2.0.0'
+tasks.withType(JavaCompile).configureEach {
+    // Sources contain '§' color codes; don't depend on the platform default encoding.
+    options.encoding = 'UTF-8'
+
+    // Paper API 26.x requires Java 25+.
+    options.release = 25
+}
+
+group = 'spigot.gradle.project'
+version = '26.3-0.2.1.0'
 
 repositories {
     mavenCentral()
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    implementation 'org.reflections:reflections:0.9.12'
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+    compileOnly libs.paper.api
+    implementation libs.reflections
 }
 
 shadowJar {
     // Make a fat jar so reflections can be accessed at runtime.
-    archiveClassifier.set('')
-    configurations = [project.configurations.runtimeClasspath]
+    archiveClassifier = ''
 
     // Utils to be able to get version number at runtime.
     manifest {
         attributes(
-            'Implementation-Title': project.name,
-            'Implementation-Version': project.version
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version
         )
     }
 }
 
+processResources {
+    // Keep plugin.yml's version in sync with the Gradle project version.
+    def props = [version: project.version]
+    inputs.properties(props)
+    filteringCharset = 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand(props)
+    }
+}
 build.dependsOn shadowJar
 
 test {

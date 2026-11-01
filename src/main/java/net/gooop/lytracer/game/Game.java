@@ -71,7 +71,7 @@ public class Game {
         preGameInventory = player.getInventory().getContents();
         // TODO: write to file so disconnect doesn't wipe inv
         player.getInventory().clear();
-        player.getInventory().setContents(course.getCourseInv().getContents());
+        player.getInventory().setContents(course.getCourseContents());
 
         // Anonymous repeating BukkitRunnable tasks
         anonStartGame();

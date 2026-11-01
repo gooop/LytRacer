@@ -10,15 +10,18 @@ package net.gooop.lytracer.course;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.Bukkit; // TODO: remove when locations are properly handled
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Course {
+    // Layout matches PlayerInventory#getContents():
+    // 0-35 storage (0-8 is the hotbar), 36-39 armor, 40 off hand.
+    private static final int PLAYER_INVENTORY_SIZE = 41;
+    private static final int CHESTPLATE_SLOT = 38;
+
     private Location startLocation;
     private Location endLocation;
-    private Inventory courseInv;
+    private ItemStack[] courseContents;
 
     private int numCheckpoints;
 
@@ -26,10 +29,14 @@ public class Course {
         numCheckpoints = 3;
         World world = Bukkit.getServer().getWorld("world");
         startLocation = new Location(world, 100.0, 150.0, 100.0);
-        courseInv = Bukkit.createInventory(null, InventoryType.PLAYER);
-        courseInv.setItem(38, new ItemStack(Material.ELYTRA)); // Set chestplate
+        // Note: This used to be a Bukkit.createInventory(null, InventoryType.PLAYER)
+        // inventory, but modern servers reject creating non-creatable inventory
+        // types (see InventoryType#isCreatable), so the template is a plain
+        // ItemStack array instead.
+        courseContents = new ItemStack[PLAYER_INVENTORY_SIZE];
+        courseContents[CHESTPLATE_SLOT] = new ItemStack(Material.ELYTRA); // Set chestplate
         for (int i = 1; i <= 9; i++) {
-            courseInv.setItem(i, new ItemStack(Material.FIREWORK_ROCKET));
+            courseContents[i] = new ItemStack(Material.FIREWORK_ROCKET);
         }
     }
 
@@ -55,10 +62,10 @@ public class Course {
     }
 
     /**
-     * Getter for PlayerInventory
+     * Getter for the course inventory contents template
      */
-    public Inventory getCourseInv() {
-        return courseInv;
+    public ItemStack[] getCourseContents() {
+        return courseContents;
     }
 
 }
